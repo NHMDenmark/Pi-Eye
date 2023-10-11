@@ -1,0 +1,15 @@
+
+# Function to set static IP addresses, router, and DNS server in dhcpcd.conf from the lookup table
+set_static_ip() {
+  device_name=$1
+  mac_address=$(grep "$device_name" lookup_table.txt | awk '{print $2}')
+  ip_address=$(grep "$device_name" lookup_table.txt | awk '{print $4}')
+  if [ -n "$mac_address" ] && [ -n "$ip_address" ]; then
+    echo "interface eth0" >> "$1"/etc/dhcpcd.conf
+    echo "static ip_address=$ip_address/24" >> "$1"/etc/dhcpcd.conf
+    echo "static routers=192.168.2.1" >> "$1"/etc/dhcpcd.conf
+    echo "static domain_name_servers=192.168.2.1" >> "$1"/etc/dhcpcd.conf
+  else
+    echo "Device name not found in lookup table. Skipping static IP configuration."
+  fi
+}

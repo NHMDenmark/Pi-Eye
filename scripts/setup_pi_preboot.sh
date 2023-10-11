@@ -41,8 +41,6 @@ modify_cmdline_txt() {
   fi
 }
 
-
-
 # Main script
 if [ $# -ne 2 ]; then
   echo "Usage: $0 <device_name> <path_to_boot_partition>"

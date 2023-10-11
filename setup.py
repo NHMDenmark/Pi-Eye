@@ -6,7 +6,7 @@ setup(
     python_requires=">=3.9",
     version=__version__,
     description="Pi Eye Camera Service",
-    author="Laurits Fredsgaard Larsen, Roberta Eleanor Hunt",
+    author="Lars Dam, Laurits Fredsgaard Larsen, Roberta Eleanor Hunt",
     license="MIT",
     author_email="",
     packages=find_packages(),

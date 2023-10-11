@@ -44,7 +44,7 @@ sudo raspi-config nonint do_boot_behaviour B2
 cp scripts/display_info.sh /home/pi
 
 # Make display_info.sh execute on login
-echo "bash /home/pi/display_info.sh" >> /home/pi/.profile
+# echo "bash /home/pi/display_info.sh" >> /home/pi/.profile
 
 # Get version of package
 VERSION=$(python -c "import pieye; print(pieye.__version__)")

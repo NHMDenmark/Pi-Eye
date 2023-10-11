@@ -62,18 +62,60 @@ If you prefer to modify the files manually, you can perform the following in the
     - [Mac] In network settings, a new network interface should appear called 'RNDIS/Ethernet Gadget'. If it does not connect automatically, try setting the ip address manually to `192.168.0.1`
     - [Windows] If internet sharing does not work, try setting up a bridge connection between the pi zero and your internet connection.
 5. The raspberry pi should now be accessible on pieye-[name].local through mDNS. Confirm that you can see the pi by pinging it in the terminal: `ping pieye-[name].local` (eg. `ping pieye-ant.local`)
-6. ssh into the pi using `ssh pi@pieye-[name].local` (eg. `ssh pi@pieye-ant.local`). You will need the ssh password from earlier (see NHMD secrets).
+6. ssh into the pi using `ssh pi@pieye-[name].local` (eg. `ssh pi@pieye-ant.local`). You will need the ssh password from earlier (see NHMD secrets). 
 7. You can confirm that the pi is connected to the internet by pinging a website: `ping google.com`
 8. Install git and pip:
 ```bash
 sudo apt-get update -y && sudo apt-get install git python3-pip -y
 ```
+## Add the pi to known hosts
+This step will allow access to the pi without using passwords each time. If you have already had the pis set up and something went wrong, so this is the second time you do this, you have to remove the old connection from the known_hosts file on the computer(`sudo nano ~/.ssh/known_hosts`). 
+Then use in your computers terminal:
+```bash
+ssh-copy-id ssh-copy-id username@server_ip
+```
+Example: `ssh-copy-id pi@pieye-earwig.local` You will be prompted for the pis password.
+## Set static IP address
+This step is not necessarily needed but it should add to the stability of connecting with the pis.
+
+Ssh into your pi. Check which type of connection your pi is using.
+```bash
+ifconfig
+```
+Look for either eth0 or usb0 although other possibilities may exist.
+
+Open the dhcpcd.conf file on the pi.
+```bash
+sudo nano /etc/dhcpcd.conf
+```
+Then add the following near the end of the document. There is an example that are almost alike so just put it below that.
+"interface 'insert either eth0 or usb0'"
+"static ip_address=192.168.2.'insert different numbers here'/24" These lines needs to be edited to give each pi a unique ip.
+Example:
+```bash
+interface eth0
+static ip_address=192.168.2.2/24
+static routers=192.168.2.1
+static domain_name_servers=192.168.2.1
+```
+Reset your dhcpcd:
+```bash
+sudo service dhcpcd restart
+```
+## Set the Pi-Eye boot to wait for connection
+Ssh into the pi. 
+```bash
+sudo raspi-config
+```
+A menu will open up. Use arrow keys to navigate and enter to choose. 
+Choose option one, then option five and there choose to wait for connection on boot. 
+Leave the config menu. 
 ## Pi-Eye installation
 Once the Raspberry Pi has is setup, connected to the internet and has git and pip installed, we can install the Pi-Eye software.
 ### Option 1: Install from source and start service
 The following will run the setup script, cloning the Pi-Eye repository and enabling the service
 ```bash
-curl -sSL https://raw.githubusercontent.com/NHMDenmark/Pi-Eye/main/scripts/setup_pieye.sh | bash
+curl -sSL https://raw.githubusercontent.com/NHMDenmark/Pi-Eye/main/scripts/install_pieye.sh | bash
 ```
 
 ### Option 2: Pip install, but no service
@@ -120,7 +162,7 @@ The raspberry pi zeros are physically mounted onto the raspberry pi HQ cameras u
     - Check that the IP, hostname and mac addresses displayed on the screen are correct
     - Check that the pi is able to ping the computer at `192.168.0.1`
     - Check that the Pieye service is running without errors
-4. Try rebooting the pi and reconnecting it to the computer
+4. Try rebooting the pi and reconnecting it to the computer  
 
 ## The Pieye server does not respond
 1. Check that you can ping the pieye from the computer
@@ -130,6 +172,10 @@ The raspberry pi zeros are physically mounted onto the raspberry pi HQ cameras u
     - Try restarting the service with `sudo systemctl restart pieye`
     - Alternatively: check the status of the service with `journalctl -u pieye`
 3. Try rebooting the pi and reconnecting it to the computer
+
+## Nothing works with the Pieye
+1. Make sure the powersupply is working correctly. Raspberry pi can have issues getting stable power this can be seen if the led light on the pi keeps blinking. Change cables/powersupply and if that doesnt work change the pi itself. 
+2. Try reinstalling the SD card of the pi and set up everything again. The cards can have issues. Think back to how old floppy disks used to behave.
 
 # TODO
 1. Make a service to update the git on the pi automatically if there is a new release - including copying the pieye.service file and rebooting the service? - if this works, remove the cronjob from setup.sh - However, consider if this is a good idea, as it might be better to have a manual update process to avoid breaking things
