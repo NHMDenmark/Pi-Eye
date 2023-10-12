@@ -72,7 +72,7 @@ sudo apt-get update -y && sudo apt-get install git python3-pip -y
 This step will allow access to the pi without using passwords each time. If you have already had the pis set up and something went wrong, so this is the second time you do this, you have to remove the old connection from the known_hosts file on the computer(`sudo nano ~/.ssh/known_hosts`). 
 Then use in your computers terminal:
 ```bash
-ssh-copy-id ssh-copy-id username@server_ip
+ssh-copy-id username@server_ip
 ```
 Example: `ssh-copy-id pi@pieye-earwig.local` You will be prompted for the pis password.
 ## Set static IP address
@@ -108,7 +108,7 @@ Ssh into the pi.
 sudo raspi-config
 ```
 A menu will open up. Use arrow keys to navigate and enter to choose. 
-Choose option one, then option five and there choose to wait for connection on boot. 
+Choose option 1, then option 6 and there choose to wait for connection on boot. 
 Leave the config menu. 
 ## Pi-Eye installation
 Once the Raspberry Pi has is setup, connected to the internet and has git and pip installed, we can install the Pi-Eye software.
