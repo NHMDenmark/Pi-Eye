@@ -110,6 +110,21 @@ sudo raspi-config
 A menu will open up. Use arrow keys to navigate and enter to choose. 
 Choose option 1, then option 6 and there choose to wait for connection on boot. 
 Leave the config menu. 
+
+## Optional: Set delay at boot
+This option will allow the pis to not all connect at the same time which potentially can cause trouble. The downside of setting this is that you will have some delay when you start everything up.
+
+Ssh into the pi.
+```bash
+sudo nano /boot/config.txt
+```
+Then add the following to the file. Where x is the delay in seconds you want. 2-3 seconds added per pi should be fine. So the first pi can have 3 and the last 15 seconds of delay fex. 
+Ssh into the pi.
+```bash
+boot_delay=x
+```
+Save the file by using ctrl + o then exit with ctrl + x.
+
 ## Pi-Eye installation
 Once the Raspberry Pi has is setup, connected to the internet and has git and pip installed, we can install the Pi-Eye software.
 ### Option 1: Install from source and start service
