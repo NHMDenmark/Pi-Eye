@@ -125,6 +125,17 @@ boot_delay=x
 ```
 Save the file by using ctrl + o then exit with ctrl + x.
 
+## Optional: Add reboot script if no network connection
+Add the network_check.sh script(found in scripts) to the pi home directory. 
+```bash
+crontab -e
+```
+Then add
+```bash
+*/1 * * * * /home/pi/network_check.sh
+```
+at the bottom of the crontab file. This will make the script run once per minute. 
+
 ## Pi-Eye installation
 Once the Raspberry Pi has is setup, connected to the internet and has git and pip installed, we can install the Pi-Eye software.
 ### Option 1: Install from source and start service
